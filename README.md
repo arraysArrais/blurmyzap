@@ -6,6 +6,10 @@ Browser extension that blurs your WhatsApp Web chats so nobody can read over you
 
 Works on **Google Chrome** (and other Chromium browsers) and **Mozilla Firefox**.
 
+## Install
+
+**Chrome** (and other Chromium browsers): install from the [Chrome Web Store](https://chromewebstore.google.com/detail/blurmyzap-blur-de-privaci/maccpccgkmmfoopjigflmjkbckajgkpg).
+
 ## Features
 
 - Blur the chat list, profile pictures, chat header, messages, photos/videos, the entire conversation and/or the message input — each one can be toggled on or off
@@ -62,6 +66,10 @@ To add a language, create `_locales/<code>/messages.json` with the same keys as 
 Extensão de navegador que aplica blur nas conversas do WhatsApp Web para ninguém ficar xeretando. Passe o mouse para revelar.
 
 Funciona no **Google Chrome** (e outros navegadores Chromium) e no **Mozilla Firefox**.
+
+### Instalação
+
+**Chrome** (e outros navegadores Chromium): instale pela [Chrome Web Store](https://chromewebstore.google.com/detail/blurmyzap-blur-de-privaci/maccpccgkmmfoopjigflmjkbckajgkpg).
 
 ### Recursos
 
