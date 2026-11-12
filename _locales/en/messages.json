@@ -1,4 +1,5 @@
 {
+  "extName": { "message": "BlurMyZap - Privacy Blur for WhatsApp Web" },
   "extDescription": { "message": "Blurs your WhatsApp Web chats. Hover to reveal." },
   "commandToggle": { "message": "Toggle blur on/off" },
   "statusOn": { "message": "BlurMyZap — on" },
