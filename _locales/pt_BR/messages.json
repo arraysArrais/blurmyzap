@@ -1,0 +1,18 @@
+{
+  "extDescription": { "message": "Aplica blur nas conversas do WhatsApp Web. Passe o mouse para revelar." },
+  "commandToggle": { "message": "Ligar/desligar o blur" },
+  "statusOn": { "message": "BlurMyZap — ativado" },
+  "statusOff": { "message": "BlurMyZap — desativado" },
+  "enabled": { "message": "Blur ativado" },
+  "whatToBlur": { "message": "O que borrar" },
+  "chatList": { "message": "Lista de conversas" },
+  "avatars": { "message": "Fotos de perfil" },
+  "chatHeader": { "message": "Cabeçalho da conversa" },
+  "messages": { "message": "Mensagens" },
+  "media": { "message": "Imagens e vídeos" },
+  "conversation": { "message": "Conversa inteira" },
+  "composer": { "message": "Campo de digitação" },
+  "revealOnHover": { "message": "Revelar ao passar o mouse" },
+  "intensity": { "message": "Intensidade" },
+  "shortcut": { "message": "Atalho" }
+}

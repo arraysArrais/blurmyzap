@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>BlurMyZap</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <header>
+    <img src="icons/icon32.png" alt="" width="24" height="24" />
+    <h1>BlurMyZap</h1>
+  </header>
+
+  <label class="row main">
+    <span data-i18n="enabled"></span>
+    <input type="checkbox" id="enabled" />
+  </label>
+
+  <fieldset id="options">
+    <legend data-i18n="whatToBlur"></legend>
+    <label class="row"><span data-i18n="chatList"></span><input type="checkbox" id="chatList" /></label>
+    <label class="row"><span data-i18n="avatars"></span><input type="checkbox" id="avatars" /></label>
+    <label class="row"><span data-i18n="chatHeader"></span><input type="checkbox" id="chatHeader" /></label>
+    <label class="row"><span data-i18n="messages"></span><input type="checkbox" id="messages" /></label>
+    <label class="row"><span data-i18n="media"></span><input type="checkbox" id="media" /></label>
+    <label class="row"><span data-i18n="conversation"></span><input type="checkbox" id="conversation" /></label>
+    <label class="row"><span data-i18n="composer"></span><input type="checkbox" id="composer" /></label>
+
+    <label class="row"><span data-i18n="revealOnHover"></span><input type="checkbox" id="revealOnHover" /></label>
+
+    <label class="slider">
+      <span><span data-i18n="intensity"></span>: <output id="intensityValue"></output>px</span>
+      <input type="range" id="intensity" min="2" max="20" step="1" />
+    </label>
+  </fieldset>
+
+  <footer><span data-i18n="shortcut"></span>: <kbd>Alt</kbd>+<kbd>X</kbd></footer>
+
+  <script src="defaults.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

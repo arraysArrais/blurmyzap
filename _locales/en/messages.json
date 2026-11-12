@@ -1,0 +1,18 @@
+{
+  "extDescription": { "message": "Blurs your WhatsApp Web chats. Hover to reveal." },
+  "commandToggle": { "message": "Toggle blur on/off" },
+  "statusOn": { "message": "BlurMyZap — on" },
+  "statusOff": { "message": "BlurMyZap — off" },
+  "enabled": { "message": "Blur enabled" },
+  "whatToBlur": { "message": "What to blur" },
+  "chatList": { "message": "Chat list" },
+  "avatars": { "message": "Profile pictures" },
+  "chatHeader": { "message": "Chat header" },
+  "messages": { "message": "Messages" },
+  "media": { "message": "Photos and videos" },
+  "conversation": { "message": "Entire conversation" },
+  "composer": { "message": "Message input" },
+  "revealOnHover": { "message": "Reveal on hover" },
+  "intensity": { "message": "Intensity" },
+  "shortcut": { "message": "Shortcut" }
+}

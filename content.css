@@ -1,0 +1,65 @@
+/*
+ * BlurMyZap
+ * As classes do WhatsApp Web são ofuscadas e mudam com frequência, então os
+ * seletores abaixo se apoiam em IDs, roles e atributos mais estáveis.
+ * Cada seção só é ativada quando o <html> tem a classe correspondente.
+ */
+
+:root {
+  --bmz-blur: 6px;
+}
+
+/* ---------- Seletores alvo ---------- */
+
+/* Lista de conversas */
+html.bmz-on.bmz-chatList #pane-side [role="listitem"],
+html.bmz-on.bmz-chatList #pane-side [role="row"],
+
+/* Fotos de perfil (lista, cabeçalho e dentro da conversa) */
+html.bmz-on.bmz-avatars #pane-side img,
+html.bmz-on.bmz-avatars #main header img,
+html.bmz-on.bmz-avatars #main [role="row"] [role="button"] img[draggable="false"],
+
+/* Cabeçalho da conversa aberta */
+html.bmz-on.bmz-chatHeader #main header,
+
+/* Mensagens: cada linha da conversa ([role="row"]); as classes .message-in/out
+   ficam como reserva caso o WhatsApp deixe de usar role="row". */
+html.bmz-on.bmz-messages #main [role="row"],
+html.bmz-on.bmz-messages #main .message-in:not([role="row"] *),
+html.bmz-on.bmz-messages #main .message-out:not([role="row"] *),
+
+/* Conversa inteira: tudo dentro de #main, menos o cabeçalho e o rodapé */
+html.bmz-on.bmz-conversation #main > :not(header):not(footer):not(:has(header, footer)),
+
+/* Mídia */
+html.bmz-on.bmz-media #main img,
+html.bmz-on.bmz-media #main video,
+html.bmz-on.bmz-media #main canvas,
+
+/* Campo de digitação */
+html.bmz-on.bmz-composer #main footer [contenteditable="true"] {
+  filter: blur(var(--bmz-blur)) !important;
+  transition: filter 0.15s ease-in-out;
+}
+
+/* ---------- Revelar ao passar o mouse ---------- */
+
+html.bmz-on.bmz-hover.bmz-chatList #pane-side [role="listitem"]:hover,
+html.bmz-on.bmz-hover.bmz-chatList #pane-side [role="row"]:hover,
+html.bmz-on.bmz-hover.bmz-avatars #pane-side [role="listitem"]:hover img,
+html.bmz-on.bmz-hover.bmz-avatars #pane-side [role="row"]:hover img,
+html.bmz-on.bmz-hover.bmz-avatars #main header:hover img,
+html.bmz-on.bmz-hover.bmz-avatars #main [role="row"]:hover img,
+html.bmz-on.bmz-hover.bmz-chatHeader #main header:hover,
+html.bmz-on.bmz-hover.bmz-messages #main [role="row"]:hover,
+html.bmz-on.bmz-hover.bmz-messages #main .message-in:hover,
+html.bmz-on.bmz-hover.bmz-messages #main .message-out:hover,
+html.bmz-on.bmz-hover.bmz-conversation #main > :hover,
+html.bmz-on.bmz-hover.bmz-media #main [role="row"]:hover img,
+html.bmz-on.bmz-hover.bmz-media #main [role="row"]:hover video,
+html.bmz-on.bmz-hover.bmz-media #main [role="row"]:hover canvas,
+html.bmz-on.bmz-hover.bmz-composer #main footer:hover [contenteditable="true"],
+html.bmz-on.bmz-hover.bmz-composer #main footer [contenteditable="true"]:focus {
+  filter: none !important;
+}
