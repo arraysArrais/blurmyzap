@@ -14,5 +14,8 @@
   "composer": { "message": "Message input" },
   "revealOnHover": { "message": "Reveal on hover" },
   "intensity": { "message": "Intensity" },
-  "shortcut": { "message": "Shortcut" }
+  "shortcut": { "message": "Shortcut" },
+  "shortcutNotSet": { "message": "not set" },
+  "shortcutChange": { "message": "change" },
+  "shortcutSet": { "message": "set" }
 }

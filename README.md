@@ -11,7 +11,7 @@ Works on **Google Chrome** (and other Chromium browsers) and **Mozilla Firefox**
 - Blur the chat list, profile pictures, chat header, messages, photos/videos, the entire conversation and/or the message input — each one can be toggled on or off
 - Reveal on hover: see only what you point at
 - Adjustable blur intensity
-- Toggle the blur on/off with <kbd>Alt</kbd>+<kbd>X</kbd> (customizable)
+- Toggle the blur on/off with a keyboard shortcut of your choice (set it from the popup)
 - Toolbar icon shows whether the blur is on or off
 - Available in English and Portuguese (follows the browser language)
 
@@ -68,7 +68,7 @@ Funciona no **Google Chrome** (e outros navegadores Chromium) e no **Mozilla Fir
 - Blur na lista de conversas, fotos de perfil, cabeçalho da conversa, mensagens, imagens/vídeos, conversa inteira e/ou campo de digitação — cada um pode ser ligado ou desligado
 - Revelar ao passar o mouse: veja só o que você apontar
 - Intensidade do blur ajustável
-- Liga/desliga com <kbd>Alt</kbd>+<kbd>X</kbd> (personalizável)
+- Liga/desliga com um atalho de teclado à sua escolha (defina pelo popup)
 - O ícone na barra mostra se o blur está ligado ou desligado
 - Disponível em inglês e português (segue o idioma do navegador)
 

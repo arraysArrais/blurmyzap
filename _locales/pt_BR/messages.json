@@ -14,5 +14,8 @@
   "composer": { "message": "Campo de digitação" },
   "revealOnHover": { "message": "Revelar ao passar o mouse" },
   "intensity": { "message": "Intensidade" },
-  "shortcut": { "message": "Atalho" }
+  "shortcut": { "message": "Atalho" },
+  "shortcutNotSet": { "message": "não definido" },
+  "shortcutChange": { "message": "alterar" },
+  "shortcutSet": { "message": "definir" }
 }

@@ -163,15 +163,15 @@ const T = {
     s1p: "BlurMyZap blurs WhatsApp Web — just hover over a message to read it.",
     s2h: ["Choose exactly", "what to blur"],
     s2p: "Chat list, photos, messages, media — toggle each one and set the intensity.",
-    s3h: ["One shortcut.", "Instant privacy."],
-    s3p: "Press Alt+X to turn the blur on or off — the icon shows the current state.",
+    s3h: ["Your shortcut.", "Instant privacy."],
+    s3p: "Pick any keyboard shortcut to turn the blur on or off — the icon shows the current state.",
     off: "Blur off", on: "Blur on",
     largeH: ["Nobody reads", "over your shoulder."],
     largeP: "Blurs WhatsApp Web chats, photos and messages.\nHover to reveal. Free and open source.",
     popup: {
       enabled: "Blur enabled", what: "What to blur",
       items: ["Chat list", "Profile pictures", "Chat header", "Messages", "Photos and videos", "Entire conversation", "Message input"],
-      hover: "Reveal on hover", intensity: "Intensity", shortcut: "Shortcut"
+      hover: "Reveal on hover", intensity: "Intensity", shortcut: "Shortcut", change: "change"
     },
     chats: [
       ["Ana Souza", "Did you see the proposal?", "10:42", 2],
@@ -202,15 +202,15 @@ const T = {
     s1p: "O BlurMyZap borra o WhatsApp Web — passe o mouse sobre a mensagem para ler.",
     s2h: ["Escolha exatamente", "o que borrar"],
     s2p: "Lista de conversas, fotos, mensagens, mídia — ligue cada item e ajuste a intensidade.",
-    s3h: ["Um atalho.", "Privacidade na hora."],
-    s3p: "Aperte Alt+X para ligar ou desligar o blur — o ícone mostra o estado atual.",
+    s3h: ["Seu atalho.", "Privacidade na hora."],
+    s3p: "Escolha o atalho de teclado que quiser para ligar ou desligar o blur — o ícone mostra o estado atual.",
     off: "Blur desligado", on: "Blur ligado",
     largeH: ["Ninguém espia", "suas conversas."],
     largeP: "Borra conversas, fotos e mensagens do WhatsApp Web.\nPasse o mouse para revelar. Gratuito e de código aberto.",
     popup: {
       enabled: "Blur ativado", what: "O que borrar",
       items: ["Lista de conversas", "Fotos de perfil", "Cabeçalho da conversa", "Mensagens", "Imagens e vídeos", "Conversa inteira", "Campo de digitação"],
-      hover: "Revelar ao passar o mouse", intensity: "Intensidade", shortcut: "Atalho"
+      hover: "Revelar ao passar o mouse", intensity: "Intensidade", shortcut: "Atalho", change: "alterar"
     },
     chats: [
       ["Ana Souza", "Viu a proposta?", "10:42", 2],
@@ -286,7 +286,7 @@ function popupHtml(x, y) {
     ${P.items.map((it, i) => `<div class="r"><span>${it}</span>${cb(on[i])}</div>`).join("")}
     <div class="r"><span>${P.hover}</span>${cb(true)}</div>
     <div class="slider">${P.intensity}: 6px<div class="track"></div></div>
-    <footer>${P.shortcut}: <kbd>Alt</kbd>+<kbd>X</kbd></footer>
+    <footer>${P.shortcut}: <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd> · <span style="color:#25d366">${P.change}</span></footer>
   </div>`;
 }
 
@@ -328,7 +328,7 @@ const shots = {
   s3: () => `
     ${caption(T.s3h, T.s3p, 44)}
     <div style="position:absolute;left:0;right:0;top:215px;display:flex;justify-content:center">
-      <div class="keys"><div class="key">Alt</div><span class="plus">+</span><div class="key">X</div></div>
+      <div class="keys"><div class="key">Ctrl</div><span class="plus">+</span><div class="key">Shift</div><span class="plus">+</span><div class="key">?</div></div>
     </div>
     ${windowHtml({ x: 60, y: 340, w: 560, h: 420, blurred: false, chats: 5, extOff: true })}
     ${windowHtml({ x: 660, y: 340, w: 560, h: 420, blurred: true, reveal: -1, chats: 5 })}

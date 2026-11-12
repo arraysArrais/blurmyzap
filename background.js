@@ -34,7 +34,7 @@ chrome.storage.onChanged.addListener((changes, area) => {
   }
 });
 
-// Atalho Alt+X
+// Atalho de teclado: sem tecla padrão; o usuário define na tela de atalhos do navegador (link no popup).
 chrome.commands.onCommand.addListener(async (command) => {
   if (command !== "toggle-blur") return;
   const { enabled } = await chrome.storage.sync.get({ enabled: BMZ_DEFAULTS.enabled });
