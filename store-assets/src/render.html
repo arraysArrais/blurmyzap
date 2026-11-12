@@ -1,0 +1,343 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>BlurMyZap store assets</title>
+<!--
+  Gera as imagens das lojas. Uso (Chrome headless):
+  chrome --headless=new --hide-scrollbars --window-size=W,H --screenshot=out.png "file:///.../render.html?shot=<id>&lang=<en|pt>"
+  shots: tile-small (440x280), tile-large (1400x560), s1, s2, s3 (1280x800)
+-->
+<style>
+  :root {
+    --green: #25d366;
+    --green-dark: #128c4f;
+    --ink: #0f1a20;
+    --ink-2: #16252d;
+    --panel: #1d2e37;
+    --line: #2a3d47;
+    --text: #e9edef;
+    --muted: #8fa3ad;
+    --bubble-in: #233640;
+    --bubble-out: #1f5e45;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { overflow: hidden; }
+  body {
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    color: var(--text);
+    background: radial-gradient(1200px 700px at 15% 0%, #1c4a37 0%, transparent 60%),
+                radial-gradient(900px 600px at 100% 100%, #123b2c 0%, transparent 55%),
+                var(--ink);
+  }
+  .stage { position: relative; width: 100vw; height: 100vh; }
+
+  /* ---------- Marca ---------- */
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .brand img { display: block; }
+  .brand b { font-weight: 700; letter-spacing: -0.02em; }
+  .accent { color: var(--green); }
+
+  /* ---------- Janela do navegador ---------- */
+  .window {
+    position: absolute;
+    background: var(--ink-2);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.03) inset;
+  }
+  .toolbar {
+    height: 44px; display: flex; align-items: center; gap: 14px; padding: 0 16px;
+    background: #0c161b; border-bottom: 1px solid var(--line);
+  }
+  .dots { display: flex; gap: 7px; }
+  .dots i { width: 11px; height: 11px; border-radius: 50%; background: #3a4b54; display: block; }
+  .url {
+    flex: 1; height: 28px; border-radius: 14px; background: #18262e; color: var(--muted);
+    font-size: 13px; display: flex; align-items: center; padding: 0 14px; gap: 8px;
+  }
+  .url svg { opacity: .7; }
+  .ext { width: 26px; height: 26px; border-radius: 6px; display: grid; place-items: center; }
+  .ext.active { background: #22343d; outline: 1px solid #3c535e; }
+  .ext img { width: 18px; height: 18px; }
+
+  /* ---------- App de chat genérico ---------- */
+  .app { display: flex; height: calc(100% - 44px); }
+  .side { width: 34%; min-width: 0; border-right: 1px solid var(--line); background: #13222a; display: flex; flex-direction: column; }
+  .search { margin: 12px; height: 34px; border-radius: 9px; background: #1b2c35; color: var(--muted); font-size: 13px; display: flex; align-items: center; padding: 0 12px; }
+  .chat { display: flex; gap: 12px; align-items: center; padding: 10px 14px; border-bottom: 1px solid rgba(42,61,71,.55); }
+  .chat.sel { background: #1c2f39; }
+  .av { width: 44px; height: 44px; border-radius: 50%; flex: none; position: relative; overflow: hidden; }
+  .av::after { content: ""; position: absolute; left: 50%; top: 22%; width: 40%; height: 40%; transform: translateX(-50%); border-radius: 50%; background: rgba(255,255,255,.55); }
+  .av::before { content: ""; position: absolute; left: 50%; bottom: -30%; width: 80%; height: 60%; transform: translateX(-50%); border-radius: 50%; background: rgba(255,255,255,.55); }
+  .meta { flex: 1; min-width: 0; }
+  .row1 { display: flex; justify-content: space-between; gap: 8px; }
+  .name { font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .time { font-size: 12px; color: var(--muted); flex: none; }
+  .prev { font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
+  .badge { background: var(--green); color: #062b17; font-size: 11px; font-weight: 700; border-radius: 10px; padding: 0 6px; margin-left: 6px; }
+
+  .main { flex: 1; display: flex; flex-direction: column; min-width: 0; position: relative; }
+  .head { height: 60px; display: flex; align-items: center; gap: 12px; padding: 0 18px; background: #172831; border-bottom: 1px solid var(--line); }
+  .head .av { width: 38px; height: 38px; }
+  .head small { display: block; font-size: 12px; color: var(--muted); }
+  .msgs {
+    flex: 1; padding: 18px 28px; display: flex; flex-direction: column; gap: 10px;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(37,211,102,.05), transparent 40%),
+      #0f1d24;
+  }
+  .day { align-self: center; font-size: 12px; color: var(--muted); background: #1a2a32; padding: 4px 12px; border-radius: 8px; }
+  .b { max-width: 62%; padding: 8px 12px 18px; border-radius: 10px; font-size: 14.5px; line-height: 1.4; position: relative; }
+  .b .t { position: absolute; right: 10px; bottom: 4px; font-size: 11px; color: rgba(233,237,239,.6); }
+  .b.in { align-self: flex-start; background: var(--bubble-in); border-top-left-radius: 3px; }
+  .b.out { align-self: flex-end; background: var(--bubble-out); border-top-right-radius: 3px; }
+  .b.media { padding: 5px; }
+  .b.media .pic { width: 260px; height: 150px; border-radius: 7px; background: linear-gradient(135deg, #f6a54b 0%, #e2566f 45%, #6c4dd6 100%); position: relative; overflow: hidden; }
+  .b.media .pic::after { content: ""; position: absolute; left: 12%; bottom: -30%; width: 70%; height: 70%; border-radius: 50%; background: rgba(20,30,40,.45); }
+  .compose { height: 58px; display: flex; align-items: center; gap: 12px; padding: 0 18px; background: #172831; border-top: 1px solid var(--line); }
+  .compose .field { flex: 1; height: 38px; border-radius: 10px; background: #22343d; color: var(--muted); display: flex; align-items: center; padding: 0 14px; font-size: 14px; }
+  .compose .send { width: 38px; height: 38px; border-radius: 50%; background: var(--green); display: grid; place-items: center; }
+
+  /* blur aplicado (o que a extensão faz) */
+  .blurred .chat, .blurred .head, .blurred .b { filter: blur(var(--bz, 6px)); }
+  .blurred .b.reveal { filter: none; box-shadow: 0 0 0 2px rgba(37,211,102,.75), 0 10px 30px rgba(0,0,0,.4); }
+  .cursor { position: absolute; width: 26px; height: 26px; pointer-events: none; filter: drop-shadow(0 2px 3px rgba(0,0,0,.5)); }
+
+  /* ---------- Popup (igual ao popup real, tema escuro) ---------- */
+  .popup {
+    position: absolute; width: 280px; padding: 12px 14px; border-radius: 10px;
+    background: #111b21; color: #e9edef; border: 1px solid #2a3942;
+    font-size: 13px; line-height: 1.4;
+    box-shadow: 0 24px 60px rgba(0,0,0,.6);
+  }
+  .popup header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .popup h1 { font-size: 16px; }
+  .popup .r { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; }
+  .popup .r.top { font-weight: 600; padding-bottom: 10px; border-bottom: 1px solid #2a3942; margin-bottom: 8px; }
+  .popup legend { color: #8696a0; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 4px; display: block; }
+  .popup .cb { width: 16px; height: 16px; border-radius: 3px; border: 2px solid #8696a0; display: grid; place-items: center; }
+  .popup .cb.on { background: var(--green); border-color: var(--green); }
+  .popup .cb.on::after { content: ""; width: 4px; height: 8px; border: solid #0b1b12; border-width: 0 2px 2px 0; transform: translateY(-1px) rotate(45deg); }
+  .popup .slider { margin-top: 8px; }
+  .popup .track { margin-top: 8px; height: 4px; border-radius: 2px; background: #2a3942; position: relative; }
+  .popup .track::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 22%; background: var(--green); border-radius: 2px; }
+  .popup .track::after { content: ""; position: absolute; left: 22%; top: 50%; width: 14px; height: 14px; border-radius: 50%; background: var(--green); transform: translate(-50%, -50%); }
+  .popup footer { margin-top: 10px; padding-top: 8px; border-top: 1px solid #2a3942; color: #8696a0; font-size: 11px; }
+  kbd { border: 1px solid #2a3942; border-radius: 3px; padding: 0 4px; font-size: 10px; font-family: inherit; }
+
+  /* ---------- Textos de destaque ---------- */
+  .caption { position: absolute; left: 0; right: 0; text-align: center; }
+  .caption h2 { font-size: 46px; font-weight: 700; letter-spacing: -0.025em; line-height: 1.1; }
+  .caption p { font-size: 20px; color: var(--muted); margin-top: 10px; }
+
+  .keys { display: flex; align-items: center; gap: 12px; }
+  .key {
+    min-width: 74px; height: 74px; padding: 0 18px; border-radius: 14px;
+    background: linear-gradient(#24363f, #1a2a32); border: 1px solid #3a525d;
+    box-shadow: 0 6px 0 #0c161b, 0 12px 30px rgba(0,0,0,.4);
+    display: grid; place-items: center; font-size: 30px; font-weight: 700;
+  }
+  .plus { font-size: 30px; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="stage" id="stage"></div>
+
+<script>
+const params = new URLSearchParams(location.search);
+const SHOT = params.get("shot") || "s1";
+const LANG = params.get("lang") === "pt" ? "pt" : "en";
+const ICON = "../../icons/icon128.png";
+
+const T = {
+  en: {
+    tagline: "Blur your chats. Hover to reveal.",
+    tileSub: "Privacy for WhatsApp Web",
+    search: "Search or start a new chat",
+    online: "online",
+    today: "Today",
+    typeMsg: "Type a message",
+    s1h: ["Keep prying eyes", "off your chats"],
+    s1p: "BlurMyZap blurs WhatsApp Web — just hover over a message to read it.",
+    s2h: ["Choose exactly", "what to blur"],
+    s2p: "Chat list, photos, messages, media — toggle each one and set the intensity.",
+    s3h: ["One shortcut.", "Instant privacy."],
+    s3p: "Press Alt+X to turn the blur on or off — the icon shows the current state.",
+    off: "Blur off", on: "Blur on",
+    largeH: ["Nobody reads", "over your shoulder."],
+    largeP: "Blurs WhatsApp Web chats, photos and messages.\nHover to reveal. Free and open source.",
+    popup: {
+      enabled: "Blur enabled", what: "What to blur",
+      items: ["Chat list", "Profile pictures", "Chat header", "Messages", "Photos and videos", "Entire conversation", "Message input"],
+      hover: "Reveal on hover", intensity: "Intensity", shortcut: "Shortcut"
+    },
+    chats: [
+      ["Ana Souza", "Did you see the proposal?", "10:42", 2],
+      ["Marketing Team", "Marcos: slides are ready", "10:15", 5],
+      ["Mom", "Don't forget Sunday lunch", "09:58", 0],
+      ["Lucas Pereira", "Haha that's perfect", "Yesterday", 0],
+      ["Carla Mendes", "Photo", "Yesterday", 0],
+      ["Gym buddies", "Rafa: 7am tomorrow?", "Monday", 0],
+      ["Pedro Lima", "Thanks, man!", "Sunday", 0]
+    ],
+    msgs: [
+      ["in", "Hey! Did you see the proposal I sent?", "10:31"],
+      ["out", "Yes, reading it right now", "10:33"],
+      ["in", "What do you think about the budget?", "10:35"],
+      ["out", "Looks good — just a couple of tweaks on page 3", "10:38"],
+      ["media", "", "10:40"],
+      ["in", "Great, let's talk after lunch then", "10:42"]
+    ]
+  },
+  pt: {
+    tagline: "Borre suas conversas. Passe o mouse para revelar.",
+    tileSub: "Privacidade no WhatsApp Web",
+    search: "Pesquisar ou começar uma conversa",
+    online: "online",
+    today: "Hoje",
+    typeMsg: "Digite uma mensagem",
+    s1h: ["Chega de gente", "xeretando suas conversas"],
+    s1p: "O BlurMyZap borra o WhatsApp Web — passe o mouse sobre a mensagem para ler.",
+    s2h: ["Escolha exatamente", "o que borrar"],
+    s2p: "Lista de conversas, fotos, mensagens, mídia — ligue cada item e ajuste a intensidade.",
+    s3h: ["Um atalho.", "Privacidade na hora."],
+    s3p: "Aperte Alt+X para ligar ou desligar o blur — o ícone mostra o estado atual.",
+    off: "Blur desligado", on: "Blur ligado",
+    largeH: ["Ninguém espia", "suas conversas."],
+    largeP: "Borra conversas, fotos e mensagens do WhatsApp Web.\nPasse o mouse para revelar. Gratuito e de código aberto.",
+    popup: {
+      enabled: "Blur ativado", what: "O que borrar",
+      items: ["Lista de conversas", "Fotos de perfil", "Cabeçalho da conversa", "Mensagens", "Imagens e vídeos", "Conversa inteira", "Campo de digitação"],
+      hover: "Revelar ao passar o mouse", intensity: "Intensidade", shortcut: "Atalho"
+    },
+    chats: [
+      ["Ana Souza", "Viu a proposta?", "10:42", 2],
+      ["Equipe de Marketing", "Marcos: os slides estão prontos", "10:15", 5],
+      ["Mãe", "Não esquece o almoço de domingo", "09:58", 0],
+      ["Lucas Pereira", "Kkkk perfeito", "Ontem", 0],
+      ["Carla Mendes", "Foto", "Ontem", 0],
+      ["Galera da academia", "Rafa: amanhã 7h?", "Segunda", 0],
+      ["Pedro Lima", "Valeu, mano!", "Domingo", 0]
+    ],
+    msgs: [
+      ["in", "Oi! Viu a proposta que te mandei?", "10:31"],
+      ["out", "Vi sim, tô lendo agora", "10:33"],
+      ["in", "O que achou do orçamento?", "10:35"],
+      ["out", "Tá bom — só uns ajustes na página 3", "10:38"],
+      ["media", "", "10:40"],
+      ["in", "Show, a gente conversa depois do almoço", "10:42"]
+    ]
+  }
+}[LANG];
+
+const AV = [
+  "linear-gradient(135deg,#f59e0b,#ef4444)", "linear-gradient(135deg,#8b5cf6,#6366f1)",
+  "linear-gradient(135deg,#ec4899,#f43f5e)", "linear-gradient(135deg,#3b82f6,#06b6d4)",
+  "linear-gradient(135deg,#14b8a6,#22c55e)", "linear-gradient(135deg,#f97316,#eab308)",
+  "linear-gradient(135deg,#64748b,#475569)"
+];
+
+const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+const lock = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>`;
+const cursorSvg = `<svg viewBox="0 0 24 24" width="26" height="26"><path d="M4 2l16 9-7 2-3 7z" fill="#fff" stroke="#111" stroke-width="1.4" stroke-linejoin="round"/></svg>`;
+
+function windowHtml({ x, y, w, h, blurred, reveal, bz = 6, chats = 7, extActive = false, extOff = false }) {
+  const list = T.chats.slice(0, chats).map(([n, p, t, badge], i) => `
+    <div class="chat${i === 0 ? " sel" : ""}">
+      <div class="av" style="background:${AV[i]}"></div>
+      <div class="meta">
+        <div class="row1"><span class="name">${esc(n)}</span><span class="time">${t}</span></div>
+        <div class="prev">${esc(p)}${badge ? `<span class="badge">${badge}</span>` : ""}</div>
+      </div>
+    </div>`).join("");
+  const msgs = T.msgs.map(([k, txt, t], i) => k === "media"
+    ? `<div class="b out media${reveal === i ? " reveal" : ""}"><div class="pic"></div><span class="t">${t}</span></div>`
+    : `<div class="b ${k}${reveal === i ? " reveal" : ""}">${esc(txt)}<span class="t">${t}</span></div>`).join("");
+  const extIcon = extOff ? "../../icons/icon32-off.png" : "../../icons/icon32.png";
+  return `
+  <div class="window ${blurred ? "blurred" : ""}" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px;--bz:${bz}px">
+    <div class="toolbar">
+      <div class="dots"><i></i><i></i><i></i></div>
+      <div class="url">${lock}web.whatsapp.com</div>
+      <div class="ext${extActive ? " active" : ""}"><img src="${extIcon}" alt=""></div>
+    </div>
+    <div class="app">
+      <div class="side"><div class="search">${T.search}</div>${list}</div>
+      <div class="main">
+        <div class="head"><div class="av" style="background:${AV[0]}"></div><div><b>${esc(T.chats[0][0])}</b><small>${T.online}</small></div></div>
+        <div class="msgs"><div class="day">${T.today}</div>${msgs}</div>
+        <div class="compose"><div class="field">${T.typeMsg}</div><div class="send"><svg width="16" height="16" viewBox="0 0 24 24" fill="#062b17"><path d="M3 20l18-8L3 4v6l12 2-12 2z"/></svg></div></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function popupHtml(x, y) {
+  const P = T.popup;
+  const on = [true, true, true, true, true, false, false];
+  const cb = (v) => `<span class="cb${v ? " on" : ""}"></span>`;
+  return `
+  <div class="popup" style="left:${x}px;top:${y}px">
+    <header><img src="../../icons/icon32.png" width="24" height="24" alt=""><h1>BlurMyZap</h1></header>
+    <div class="r top"><span>${P.enabled}</span>${cb(true)}</div>
+    <legend>${P.what}</legend>
+    ${P.items.map((it, i) => `<div class="r"><span>${it}</span>${cb(on[i])}</div>`).join("")}
+    <div class="r"><span>${P.hover}</span>${cb(true)}</div>
+    <div class="slider">${P.intensity}: 6px<div class="track"></div></div>
+    <footer>${P.shortcut}: <kbd>Alt</kbd>+<kbd>X</kbd></footer>
+  </div>`;
+}
+
+const caption = (h, p, top) => `
+  <div class="caption" style="top:${top}px"><h2>${h[0]} <span class="accent">${h[1]}</span></h2><p>${p}</p></div>`;
+
+const shots = {
+  "tile-small": () => `
+    <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:0 34px;gap:16px">
+      <div class="brand"><img src="${ICON}" width="72" height="72" alt=""><b style="font-size:40px">BlurMyZap</b></div>
+      <div style="font-size:21px;line-height:1.3;font-weight:600">${T.tagline}</div>
+      <div style="font-size:15px;color:var(--muted)">${T.tileSub}</div>
+    </div>
+    <div style="position:absolute;right:-30px;bottom:-26px;width:150px;display:flex;flex-direction:column;gap:9px;opacity:.85;filter:blur(3px)">
+      <div style="height:22px;border-radius:8px;background:var(--bubble-in);width:80%"></div>
+      <div style="height:22px;border-radius:8px;background:var(--bubble-out);width:90%;align-self:flex-end"></div>
+      <div style="height:22px;border-radius:8px;background:var(--bubble-in);width:70%"></div>
+    </div>`,
+
+  "tile-large": () => `
+    <div style="position:absolute;left:90px;top:0;bottom:0;width:560px;display:flex;flex-direction:column;justify-content:center;gap:24px">
+      <div class="brand"><img src="${ICON}" width="64" height="64" alt=""><b style="font-size:38px">BlurMyZap</b></div>
+      <div style="font-size:50px;font-weight:700;letter-spacing:-.025em;line-height:1.08">${T.largeH[0]}<br><span class="accent">${T.largeH[1]}</span></div>
+      <div style="font-size:20px;color:var(--muted);line-height:1.5;white-space:pre-line">${T.largeP}</div>
+    </div>
+    ${windowHtml({ x: 720, y: 60, w: 760, h: 520, blurred: true, reveal: 0, chats: 6 })}
+    <div class="cursor" style="left:1150px;top:236px">${cursorSvg}</div>`,
+
+  s1: () => `
+    ${caption(T.s1h, T.s1p, 44)}
+    ${windowHtml({ x: 80, y: 180, w: 1120, h: 600, blurred: true, reveal: 3 })}
+    <div class="cursor" style="left:1140px;top:515px">${cursorSvg}</div>`,
+
+  s2: () => `
+    ${caption(T.s2h, T.s2p, 44)}
+    ${windowHtml({ x: 80, y: 180, w: 1120, h: 600, blurred: true, reveal: -1, extActive: true })}
+    ${popupHtml(890, 228)}`,
+
+  s3: () => `
+    ${caption(T.s3h, T.s3p, 44)}
+    <div style="position:absolute;left:0;right:0;top:215px;display:flex;justify-content:center">
+      <div class="keys"><div class="key">Alt</div><span class="plus">+</span><div class="key">X</div></div>
+    </div>
+    ${windowHtml({ x: 60, y: 340, w: 560, h: 420, blurred: false, chats: 5, extOff: true })}
+    ${windowHtml({ x: 660, y: 340, w: 560, h: 420, blurred: true, reveal: -1, chats: 5 })}
+    <div style="position:absolute;left:60px;top:772px;width:560px;text-align:center;color:var(--muted);font-size:15px">${T.off}</div>
+    <div style="position:absolute;left:660px;top:772px;width:560px;text-align:center;color:var(--green);font-size:15px;font-weight:600">${T.on}</div>
+    <svg style="position:absolute;left:611px;top:530px" width="58" height="40" viewBox="0 0 58 40"><circle cx="29" cy="20" r="19" fill="#25d366"/><path d="M19 20h18m-7-7l7 7-7 7" stroke="#062b17" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+};
+
+document.getElementById("stage").innerHTML = shots[SHOT]();
+</script>
+</body>
+</html>
